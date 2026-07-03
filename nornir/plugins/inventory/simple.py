@@ -97,8 +97,9 @@ class SimpleInventory:
                 defaults_dict = yml.load(f) or {}
             if defaults_dict == {}:
                 logger.warning(
-                    f"'{self.defaults_file}' is empty or contains only comments, "
-                    "defaulting to empty defaults."
+                    "'%s' is empty or contains only comments, "
+                    "defaulting to empty defaults.",
+                    self.defaults_file,
                 )
             defaults = _get_defaults(defaults_dict)
         else:
@@ -109,8 +110,9 @@ class SimpleInventory:
             hosts_dict = yml.load(f) or {}
         if hosts_dict == {}:
             logger.warning(
-                f"'{self.host_file}' is empty or contains only comments, "
-                "defaulting to empty hosts inventory."
+                "'%s' is empty or contains only comments, "
+                "defaulting to empty hosts inventory.",
+                self.host_file,
             )
 
         for n, h in hosts_dict.items():
@@ -122,8 +124,9 @@ class SimpleInventory:
                 groups_dict = yml.load(f) or {}
             if groups_dict == {}:
                 logger.warning(
-                    f"'{self.group_file}' is empty or contains only comments, "
-                    "defaulting to empty groups inventory."
+                    "'%s' is empty or contains only comments, "
+                    "defaulting to empty groups inventory.",
+                    self.group_file,
                 )
 
             for n, g in groups_dict.items():
