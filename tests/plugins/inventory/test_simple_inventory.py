@@ -242,3 +242,14 @@ class Test:
         assert len(inv.hosts) == 1
         assert inv.groups == {}
         assert inv.defaults.data == {}
+
+    def test_simple_inventory_empty_hosts(self) -> None:
+        """Verify completely empty hosts.yaml doesn't generate exception."""
+        host_file = f"{dir_path}/data/hosts-empty.yaml"
+        group_file = f"{dir_path}/data/groups-empty.yaml"
+        defaults_file = f"{dir_path}/data/defaults-empty.yaml"
+
+        inv = SimpleInventory(host_file, group_file, defaults_file).load()
+        assert inv.hosts == {}
+        assert inv.groups == {}
+        assert inv.defaults.data == {}
