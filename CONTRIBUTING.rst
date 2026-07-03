@@ -66,13 +66,20 @@ Before you make any significant code changes to the core, it's recommended that 
 Setting up your environment
 ---------------------------
 
-In order to run tests locally you need to have `Docker <https://docs.docker.com/install/>`_ and `docker-compose <https://docs.docker.com/compose/>`_ installed.
+Nornir uses `uv <https://docs.astral.sh/uv/>`_ to manage dependencies and virtual environments. Install it either the recommended way: ``curl -LsSf https://astral.sh/uv/install.sh | sh`` or with ``pipx install uv``.
+
+Then install the project dependencies:
+
+.. code-block:: bash
+
+   uv sync --locked
+
+Optionally, you can install `Docker <https://docs.docker.com/get-started/get-docker/>`_ to run the whole test suite in a container (see the Tests section below).
 
 Updating dependencies
 ---------------------
 
-| Nornir dependencies are managed by `uv <https://docs.astral.sh/uv/>`_.
-| Either use the recommended way of installation: ``curl -LsSf https://astral.sh/uv/install.sh | sh`` or install it with ``pipx install uv``.
+Nornir dependencies are managed by `uv <https://docs.astral.sh/uv/>`_ (see `Setting up your environment`_ above).
 
 The guidelines to pin dependencies are:
 
@@ -89,21 +96,6 @@ Then, to update them:
 2. Prior to a release we will update dependencies
 
 These guidelines are not set in stone and can be changed or broken if there is a compelling reason.
-
-Starting development environment
---------------------------------
-Some tests requires additional services to be running which are managed by ``docker-compose``. You can start these services with:
-
-.. code-block:: bash
-
-   make start_dev_env
-
-You can then stop them with:
-
-.. code-block:: bash
-
-   make stop_dev_env
-
 
 Coding style
 ------------
@@ -126,8 +118,6 @@ After modifying any code in the core, at first, we recommend running unit tests 
 
    uv run pytest
 
-Note: unit tests which require additional services to be running are skipped automatically, when not running in Docker.
-
 To run all CI tests, execute:
 
 .. code-block:: bash
@@ -138,13 +128,18 @@ To run only verification of Jupyter notebook tutorials outputs with ``nbval`` ex
 
 .. code-block:: bash
 
-   make build_test_container && make nbval
-
+   make nbval
 
 To run a specific unit test:
 
 .. code-block:: bash
 
-   make build_test_container && make pytest ARGS="tests/plugins/tasks/networking/test_tcp_ping.py"
+   make pytest ARGS="tests/core/test_tasks.py"
+
+Alternatively, you can run the whole test suite inside a Docker container matching the CI Linux environment:
+
+.. code-block:: bash
+
+   make docker-tests
 
 You can find commands to run other groups of tests in the ``Makefile``

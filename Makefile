@@ -1,7 +1,5 @@
 NAME=$(shell basename $(PWD))
 
-DOCKER_COMPOSE_FILE=docker-compose.yaml
-DOCKER_COMPOSE=PYTHON=${PYTHON} docker-compose -f ${DOCKER_COMPOSE_FILE}
 NORNIR_DIRS=nornir tests docs
 
 PYTHON:=3.10
