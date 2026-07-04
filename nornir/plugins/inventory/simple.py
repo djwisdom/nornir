@@ -95,13 +95,25 @@ class SimpleInventory:
         if self.defaults_file.exists():
             with open(self.defaults_file, "r", encoding=self.encoding) as f:
                 defaults_dict = yml.load(f) or {}
+            if defaults_dict == {}:
+                logger.warning(
+                    "'%s' is empty or contains only comments, "
+                    "defaulting to empty defaults.",
+                    self.defaults_file,
+                )
             defaults = _get_defaults(defaults_dict)
         else:
             defaults = Defaults()
 
         hosts = Hosts()
         with open(self.host_file, "r", encoding=self.encoding) as f:
-            hosts_dict = yml.load(f)
+            hosts_dict = yml.load(f) or {}
+        if hosts_dict == {}:
+            logger.warning(
+                "'%s' is empty or contains only comments, "
+                "defaulting to empty hosts inventory.",
+                self.host_file,
+            )
 
         for n, h in hosts_dict.items():
             hosts[n] = _get_inventory_element(Host, h, n, defaults)
@@ -110,6 +122,12 @@ class SimpleInventory:
         if self.group_file.exists():
             with open(self.group_file, "r", encoding=self.encoding) as f:
                 groups_dict = yml.load(f) or {}
+            if groups_dict == {}:
+                logger.warning(
+                    "'%s' is empty or contains only comments, "
+                    "defaulting to empty groups inventory.",
+                    self.group_file,
+                )
 
             for n, g in groups_dict.items():
                 groups[n] = _get_inventory_element(Group, g, n, defaults)
